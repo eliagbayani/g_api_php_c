@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+include_once "../Custom/config.php";
 include_once "templates/base.php";
 echo pageHeader("Batching Queries");
 
@@ -32,7 +33,7 @@ require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
  ************************************************/
 $client = new Google_Client();
 $client->setApplicationName("Client_Library_Examples");
-$apiKey = "<YOUR_API_KEY>"; // Change to your API key.
+$apiKey = YOUR_API_KEY; // Change to your API key.
 // Warn if the API key isn't changed!
 if (strpos($apiKey, "<") !== false) {
   echo missingApiKeyWarning();

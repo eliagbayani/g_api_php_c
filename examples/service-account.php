@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+include_once "../Custom/config.php";
 session_start();
 include_once "templates/base.php";
 
@@ -36,9 +37,9 @@ require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
   Make sure the Books API is enabled on this
   account as well, or the call will fail.
  ************************************************/
-$client_id = '<YOUR_CLIENT_ID>'; //Client ID
-$service_account_name = ''; //Email Address
-$key_file_location = ''; //key.p12
+$client_id = YOUR_CLIENT_ID; //Client ID
+$service_account_name = SERVICE_ACCOUNT_NAME; //Email Address
+$key_file_location = KEY_FILE_LOCATION; //key.p12
 
 echo pageHeader("Service Account Access");
 if (strpos($client_id, "googleusercontent") == false

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+include_once "../Custom/config.php";
 include_once "templates/base.php";
 session_start();
 
@@ -24,9 +25,9 @@ require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
   the redirect URI is to this page, e.g:
   http://localhost:8080/user-example.php
  ************************************************/
-$client_id = '<YOUR_CLIENT_ID>';
-$client_secret = '<YOUR_CLIENT_SECRET>';
-$redirect_uri = '<YOUR_REDIRECT_URI>';
+$client_id = YOUR_CLIENT_ID;
+$client_secret = YOUR_CLIENT_SECRET;
+$redirect_uri = YOUR_REDIRECT_URI;
 
 $client = new Google_Client();
 $client->setClientId($client_id);
