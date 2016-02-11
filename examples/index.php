@@ -16,4 +16,10 @@ echo pageHeader("PHP Library Examples"); ?>
   <li><a href="idtoken.php">An example of verifying and retrieving the id token.</a></li>
   <li><a href="multi-api.php">An example of using multiple APIs.</a></li>
 </ul>
+
+
+<ul>
+  <li><a href="../src/Google/Service/Fusiontables.php">Fusion tables</a></li>
+</ul>
+
 <?php echo pageFooter();

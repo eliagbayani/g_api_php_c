@@ -26,6 +26,9 @@
  *
  * @author Google, Inc.
  */
+include_once "../Service.php";
+include_once "Resource.php";
+
 class Google_Service_Fusiontables extends Google_Service
 {
   /** Manage your Fusion Tables. */
