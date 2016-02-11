@@ -42,6 +42,7 @@ $client->setClientSecret($client_secret);
 $client->setRedirectUri($redirect_uri);
 $client->addScope("https://www.googleapis.com/auth/drive");
 $client->addScope("https://www.googleapis.com/auth/youtube");
+$client->addScope("https://www.googleapis.com/auth/fusiontables");
 
 /************************************************
   We are going to create both YouTube and Drive

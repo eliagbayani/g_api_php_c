@@ -26,8 +26,8 @@
  *
  * @author Google, Inc.
  */
-include_once "../Service.php";
-include_once "Resource.php";
+// include_once "../Service.php";
+// include_once "Resource.php";
 
 class Google_Service_Fusiontables extends Google_Service
 {
@@ -968,19 +968,11 @@ class Google_Service_Fusiontables_Table_Resource extends Google_Service_Resource
    * @param string $tableId The table into which new rows are being imported.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string delimiter The delimiter used to separate cell values. This
-   * can only consist of a single character. Default is ,.
-   * @opt_param string encoding The encoding of the content. Default is UTF-8. Use
-   * auto-detect if you are unsure of the encoding.
-   * @opt_param int endLine The index of the line up to which data will be
-   * imported. Default is to import the entire file. If endLine is negative, it is
-   * an offset from the end of the file; the imported content will exclude the
-   * last endLine lines.
-   * @opt_param bool isStrict Whether the imported CSV must have the same number
-   * of values for each row. If false, rows with fewer values will be padded with
-   * empty values. Default is true.
-   * @opt_param int startLine The index of the first line from which to start
-   * importing, inclusive. Default is 0.
+   * @opt_param string delimiter The delimiter used to separate cell values. This can only consist of a single character. Default is ,.
+   * @opt_param string encoding The encoding of the content. Default is UTF-8. Use auto-detect if you are unsure of the encoding.
+   * @opt_param int endLine The index of the line up to which data will be imported. Default is to import the entire file. If endLine is negative, it is an offset from the end of the file; the imported content will exclude the last endLine lines.
+   * @opt_param bool isStrict Whether the imported CSV must have the same number of values for each row. If false, rows with fewer values will be padded with empty values. Default is true.
+   * @opt_param int startLine The index of the first line from which to start importing, inclusive. Default is 0.
    * @return Google_Service_Fusiontables_Import
    */
   public function importRows($tableId, $optParams = array())
@@ -996,10 +988,8 @@ class Google_Service_Fusiontables_Table_Resource extends Google_Service_Resource
    * @param string $name The name to be assigned to the new table.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string delimiter The delimiter used to separate cell values. This
-   * can only consist of a single character. Default is ,.
-   * @opt_param string encoding The encoding of the content. Default is UTF-8. Use
-   * auto-detect if you are unsure of the encoding.
+   * @opt_param string delimiter The delimiter used to separate cell values. This can only consist of a single character. Default is ,.
+   * @opt_param string encoding The encoding of the content. Default is UTF-8. Use auto-detect if you are unsure of the encoding.
    * @return Google_Service_Fusiontables_Table
    */
   public function importTable($name, $optParams = array())

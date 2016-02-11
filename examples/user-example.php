@@ -81,6 +81,15 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   $authUrl = $client->createAuthUrl();
 }
 
+
+$service = new Google_Service_Fusiontables($client);
+$results = $service->table->listTable();
+echo "<pre>";
+print_r($results);
+echo "</pre>";
+
+
+
 /************************************************
   If we're signed in and have a request to shorten
   a URL, then we create a new URL object, set the

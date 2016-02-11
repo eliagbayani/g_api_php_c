@@ -19,7 +19,12 @@ echo pageHeader("PHP Library Examples"); ?>
 
 
 <ul>
+  <li><a href="https://developers.google.com/fusiontables" target="_blank">Documentation</a></li>
   <li><a href="../src/Google/Service/Fusiontables.php">Fusion tables</a></li>
+  <li><a href="../Custom_work/test1.php">test 1</a></li>
+  <li><a href="../Custom_work/test2.php">test 2</a></li>
+  <li><a href="../Custom_work/test3.php">test 3</a></li>
+  
 </ul>
 
 <?php echo pageFooter();
