@@ -1195,8 +1195,7 @@ class Google_Service_Drive_Permissions_Resource extends Google_Service_Resource
    * @param Google_Permission $postBody
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string emailMessage A custom message to include in the
-   * notification email.
+   * @opt_param string emailMessage A custom message to include in the notification email.
    * @opt_param bool sendNotificationEmail Whether to send a notification email
    * when sharing to users or groups. This defaults to true for users and groups,
    * and is not allowed for other requests. It must not be disabled for ownership

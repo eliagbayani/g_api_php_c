@@ -47,45 +47,34 @@ if($client->getAccessToken()) echo "\nlogged in\n\n";
 else echo "\nnot logged in\n\n";
 //************************************************
 
-$new_tbl = "eli_tbl1";
-$my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8";
+$my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
+$my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
+
+
 
 /*
-$sql = "DELETE FROM $my_table WHERE ROWID = '10'";
-$sql = "INSERT INTO $my_table ('sciname') VALUES ('elicha')";
-$sql = "CREATE TABLE Persons (PersonID int, LastName varchar(255), FirstName varchar(255),Address varchar(255),City varchar(255));";
+// $sql = "DELETE FROM $my_table WHERE ROWID = '10'";
+$sql = "INSERT INTO $my_table ('catalogNumber', 'latitude') VALUES ('elicha', '1')";
+// $sql = "CREATE TABLE Persons (PersonID int, LastName varchar(255), FirstName varchar(255),Address varchar(255),City varchar(255));";
 $results = $service->query->sql($sql);
+echo "<pre>";print_r($results);echo "</pre>"; //exit;
+*/
+
+// /*
+$results = $service->table->listTable();
+foreach ($results as $item)
+{
+    echo "<br>" . $item['name'];
+}
+// */
+
+/*
+$results = $service->query->sql("SELECT * FROM $my_table");
 echo "<pre>";print_r($results);echo "</pre>";
 */
 
 /*
-$results = $service->table->listTable();
-foreach ($results as $item) echo "<br>" . $item['name'];
+$results = $service->table->copy($my_table);
+echo "<pre>";print_r($results);echo "</pre>";
 */
-
-
-$postBody = '{"kind": "fusiontables#table", "name": "eli_tbl1", "isExportable": 1,
-  "columns": [{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "latitude", "type": "LOCATION"}]
-              }';
-$cols = '[{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"}, 
-          {"kind": "fusiontables#column", "columnId": "2", "name": "latitude", "type": "LOCATION"}]';
-
-$col1 = new Google_Service_Fusiontables_Column();
-$col1->columnId = 1;
-$col1->name = "catalogNumber";
-$col1->type = "STRING";
-
-echo "<pre>";print_r($col1);echo"<pre>";
-
-$postBody = new Google_Service_Fusiontables_Table();
-$postBody->name = "eli_tbl4";
-$postBody->isExportable = true;
-$postBody->columns = json_decode($cols);
-$postBody->kind = "fusiontables#table";
-
-
-echo "<pre>";print_r($postBody);echo"<pre>";
-$results = $service->table->insert($postBody, array());
-print_r($results);
 
