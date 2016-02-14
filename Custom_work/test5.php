@@ -20,7 +20,7 @@ if (strpos($client_id, "googleusercontent") == false
 }
 
 $client = new Google_Client();
-$client->setApplicationName("Client_Library_Examples");
+$client->setApplicationName("Client_Library_Examples eli");
 $client->addScope("https://www.googleapis.com/auth/fusiontables", "https://www.googleapis.com/auth/fusiontables.readonly");
 
 $service = new Google_Service_Fusiontables($client);
@@ -36,7 +36,10 @@ if (isset($_SESSION['service_token'])) {
 $key = file_get_contents($key_file_location);
 $cred = new Google_Auth_AssertionCredentials(
     $service_account_name,
-    array('https://www.googleapis.com/auth/fusiontables', 'https://www.googleapis.com/auth/fusiontables.readonly'),
+    // array('https://www.googleapis.com/auth/fusiontables', 'https://www.googleapis.com/auth/fusiontables.readonly'),
+    array('https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/drive.apps.readonly', 
+          'https://www.googleapis.com/auth/drive.file',
+          'https://www.googleapis.com/auth/fusiontables', 'https://www.googleapis.com/auth/fusiontables.readonly'),
     $key
 );
 $client->setAssertionCredentials($cred);
@@ -49,10 +52,10 @@ else echo "\nnot logged in\n\n";
 
 $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
 $my_table = "1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E"; //eli_tbl2
-// $my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
+$my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
 $my_table = "1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y"; //copy of Chanos chanos
-$my_table = "1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6";//eli_tbl3
-$my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
+// $my_table = "1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6";//eli_tbl3
+// $my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
 
 
 
@@ -75,39 +78,38 @@ That's it, you're done. From now, your table is readable(but for everyone, not j
 Now you can put it on a Google Maps "Fusion Layer". – sanya Dec 17 '12 at 19:09
 */
 
-// 
+/* //working OK ===========================
 $permissionsService = new Google_Service_Drive($client);
 $permissionsService = $permissionsService->permissions;
-// echo"<pre>";print_r($permissionsService->stackParameters{"Google_Service_Resource"}{"private"});echo"</pre>";exit;
-// echo"<pre>";print_r($permissionsService->{"client:Google_Service_Resource:private"});echo"</pre>";exit;
 
 $permission = new Google_Service_Drive_Permission();
 // $permission = new Google_Service_Drive_Permissions_Resource();
-$permission->setRole('owner'); 
+$permission->setRole('reader'); 
 $permission->setType('anyone'); 
-// echo"<pre>";print_r($permission);echo"</pre>";exit;
 
 $result = $permissionsService->create($my_table, $permission); 
 echo"<pre>";print_r($result);echo"</pre>";exit;
+ =========================== */
 
-/*
+
+/* //working OK  ===========================
 $service = new Google_Service_Drive($client);
 printFile($service, $my_table);
 function printFile($service, $fileId) {
   try {
     $file = $service->files->get($fileId);
-    print "Title: " . $file->getTitle();
-    print "Description: " . $file->getDescription();
-    print "MIME type: " . $file->getMimeType();
+    // print "Title: "         . $file->getTitle();
+    print "Description: "   . $file->getDescription();
+    print "MIME type: "     . $file->getMimeType();
     
   } catch (Exception $e) {
     print "An error occurred: " . $e->getMessage();
   }
 }
-*/
+=========================== */
 
 
-/*
+/* Not working, cannot find how to get the permissionId
 $service = new Google_Service_Drive($client);
 updatePermission($service, $my_table, SERVICE_ACCOUNT_NAME , "writer");
 
