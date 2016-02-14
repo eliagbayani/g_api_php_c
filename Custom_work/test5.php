@@ -59,7 +59,7 @@ $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
 
 
 
-/*
+/* http://stackoverflow.com/questions/13903782/get-access-to-fusion-tables
 You said, that you had already populated a fusion table from php using a service account . You're through the worst part, don't give up in the finish. 
 You most probably used the google-php-api-client, right? 
 If so, you already have to have a Google_Client $client in your script. 
@@ -78,7 +78,7 @@ That's it, you're done. From now, your table is readable(but for everyone, not j
 Now you can put it on a Google Maps "Fusion Layer". – sanya Dec 17 '12 at 19:09
 */
 
-// /* //working OK ===========================
+// /* //working OK =========================== Updating permissions to Google files
 $permissionsService = new Google_Service_Drive($client);
 $permissionsService = $permissionsService->permissions;
 
@@ -87,12 +87,13 @@ $permission = new Google_Service_Drive_Permission();
 $permission->setRole('reader'); 
 $permission->setType('anyone'); 
 
-$result = $permissionsService->create($my_table, $permission); 
+$result = $permissionsService->create($my_table, $permission);
 echo"<pre>";print_r($result);echo"</pre>";exit;
  // =========================== */
 
+/* another option for inserting permissions found here: https://developers.google.com/drive/v2/reference/permissions/insert */
 
-/* //working OK  ===========================
+/* //working OK  =========================== Showing File's metadata
 $service = new Google_Service_Drive($client);
 printFile($service, $my_table);
 function printFile($service, $fileId) {
