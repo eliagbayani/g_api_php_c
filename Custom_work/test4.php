@@ -48,25 +48,25 @@ else echo "\nnot logged in\n\n";
 //************************************************
 
 $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
-$my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
+// $my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
 
 
 
-/*
+// /*
 // $sql = "DELETE FROM $my_table WHERE ROWID = '10'";
-$sql = "INSERT INTO $my_table ('catalogNumber', 'latitude') VALUES ('elicha', '1')";
+$sql = "INSERT INTO $my_table ('catalogNumber', 'latitude') VALUES ('elicha2', '173')";
 // $sql = "CREATE TABLE Persons (PersonID int, LastName varchar(255), FirstName varchar(255),Address varchar(255),City varchar(255));";
 $results = $service->query->sql($sql);
 echo "<pre>";print_r($results);echo "</pre>"; //exit;
-*/
+// */
 
-// /*
+/*
 $results = $service->table->listTable();
 foreach ($results as $item)
 {
     echo "<br>" . $item['name'];
 }
-// */
+*/
 
 /*
 $results = $service->query->sql("SELECT * FROM $my_table");

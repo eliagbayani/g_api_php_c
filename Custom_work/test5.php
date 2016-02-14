@@ -51,9 +51,9 @@ else echo "\nnot logged in\n\n";
 //************************************************
 
 $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
-$my_table = "1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E"; //eli_tbl2
-$my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
-$my_table = "1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y"; //copy of Chanos chanos
+// $my_table = "1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E"; //eli_tbl2
+// $my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
+// $my_table = "1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y"; //copy of Chanos chanos
 // $my_table = "1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6";//eli_tbl3
 // $my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
 
@@ -78,7 +78,7 @@ That's it, you're done. From now, your table is readable(but for everyone, not j
 Now you can put it on a Google Maps "Fusion Layer". – sanya Dec 17 '12 at 19:09
 */
 
-/* //working OK ===========================
+// /* //working OK ===========================
 $permissionsService = new Google_Service_Drive($client);
 $permissionsService = $permissionsService->permissions;
 
@@ -89,7 +89,7 @@ $permission->setType('anyone');
 
 $result = $permissionsService->create($my_table, $permission); 
 echo"<pre>";print_r($result);echo"</pre>";exit;
- =========================== */
+ // =========================== */
 
 
 /* //working OK  ===========================
