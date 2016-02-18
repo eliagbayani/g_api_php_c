@@ -21,7 +21,7 @@ if (strpos($client_id, "googleusercontent") == false
 
 $client = new Google_Client();
 $client->setApplicationName("Client_Library_Examples eli");
-$client->addScope("https://www.googleapis.com/auth/fusiontables", "https://www.googleapis.com/auth/fusiontables.readonly");
+$client->addScope("https://www.googleapis.com/auth/fusiontables", "https://www.googleapis.com/auth/fusiontables.readonly", "https://www.googleapis.com/auth/drive");
 
 $service = new Google_Service_Fusiontables($client);
 
@@ -58,40 +58,49 @@ $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
 // $my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
 
 
+$service = new Google_Service_Fusiontables($client);
 
-/* http://stackoverflow.com/questions/13903782/get-access-to-fusion-tables
-You said, that you had already populated a fusion table from php using a service account . You're through the worst part, don't give up in the finish. 
-You most probably used the google-php-api-client, right? 
-If so, you already have to have a Google_Client $client in your script. 
-Use this to get your hands on the Drive API permission service: 
-$permissionsService = new Google_DriveService($client)->permissions; – sanya Dec 17 '12 at 19:05
-   	 
-Once you have it, create a new Permission, that will make your table public to anyone 
-like this: 
-$permission = new Google_Permission(); 
-$permission->setRole('reader'); 
-$permission->setType('anyone'); 
-Then add this permission to your fusion table: 
-$permissionsService->insert($tableId, $permission); 
+$val = "{
+                 'path': '/upload/fusiontables/v1/tables/' . $my_table . '/import',
+                 'method': 'POST',
+                 'params': {'uploadType': 'media'},
+                 'headers' : {'Content-Type' : 'application/octet-stream'},
+                 'body': 'cat1,9,\ncat2,18\n'
+               }";
 
-That's it, you're done. From now, your table is readable(but for everyone, not just you) and public. 
-Now you can put it on a Google Maps "Fusion Layer". – sanya Dec 17 '12 at 19:09
-*/
+$arr = array('uploadType'   => 'media', //'media' multipart
+             'mimeType'     => 'application/octet-stream' ,
+             'delimiter'    => ',',
+             'data'         => 'cat3,cat4' . "\n" . 'cat5,cat6',
+             'isStrict'     => false
+             
+             
+             // 'path'         => '/upload/fusiontables/v2/tables/' . $my_table . '/import',
+             // 'method'       => 'POST',
+             // 'headers'      => "{'Content-Type' : 'application/octet-stream'}"
+             // 'Content-Type' => 'application/octet-stream'
+             );
 
-// /* //working OK =========================== Updating permissions to Google files
+
+
+$results = $service->table->importRows($my_table, $arr);
+print_r($results);
+exit;
+
+
+/* //working OK =========================== Updating permissions to Google files
 $permissionsService = new Google_Service_Drive($client);
 $permissionsService = $permissionsService->permissions;
 
 $permission = new Google_Service_Drive_Permission();
 // $permission = new Google_Service_Drive_Permissions_Resource();
-$permission->setRole('writer'); //Valid values are 'reader', 'commenter', 'writer', and 'owner'
+$permission->setRole('reader'); 
 $permission->setType('anyone'); 
 
 $result = $permissionsService->create($my_table, $permission);
 echo"<pre>";print_r($result);echo"</pre>";exit;
- // =========================== */
+ =========================== */
 
-/* another option for inserting permissions found here: https://developers.google.com/drive/v2/reference/permissions/insert */
 
 /* //working OK  =========================== Showing File's metadata
 $service = new Google_Service_Drive($client);
@@ -108,23 +117,44 @@ function printFile($service, $fileId) {
   }
 }
 =========================== */
+function upload_file($auth_token)
+{
+    $target_url = 'https://www.googleapis.com/upload/upload/fusiontables/v2/tables/import?uploadType=resumable';
 
+    $post = array('extra_info' => '123456',);
 
-/* Not working, cannot find how to get the permissionId
-$service = new Google_Service_Drive($client);
-updatePermission($service, $my_table, SERVICE_ACCOUNT_NAME , "writer");
-
-function updatePermission($service, $fileId, $permissionId, $newRole) {
-  try {
-    // First retrieve the permission from the API.
-    $permission = $service->permissions->get($fileId, $permissionId);
-    $permission->setRole($newRole);
-    return $service->permissions->update($fileId, $permissionId, $permission);
-  } catch (Exception $e) {
-    print "An error occurred: " . $e->getMessage();
-  }
-  return NULL;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,$target_url);
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    $result=curl_exec ($ch);
+    curl_close ($ch);
+    echo $result;
 }
-*/
+
+
+function upload_file2($auth_token)
+{
+    $target_url = 'https://www.googleapis.com/upload/upload/fusiontables/v2/tables/import?uploadType=resumable';
+    //This needs to be the full path to the file you want to send.
+    $file_name_with_full_path = realpath('./sample.jpeg');
+    /* curl will accept an array here too.
+    * Many examples I found showed a url-encoded string instead.
+    * Take note that the 'key' in the array will be the key that shows up in the
+    * $_FILES array of the accept script. and the at sign '@' is required before the
+    * file name.
+    */
+    $post = array('extra_info' => '123456','file_contents'=>'@'.$file_name_with_full_path);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL,$target_url);
+    curl_setopt($ch, CURLOPT_POST,1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    $result=curl_exec ($ch);
+    curl_close ($ch);
+    echo $result;
+}
 
 

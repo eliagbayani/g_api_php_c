@@ -40,6 +40,7 @@ $client_id = YOUR_CLIENT_ID;
 $client_secret = YOUR_CLIENT_SECRET;
 $redirect_uri = YOUR_REDIRECT_URI;
 
+
 $client = new Google_Client();
 $client->setClientId($client_id);
 $client->setClientSecret($client_secret);
@@ -72,6 +73,8 @@ if (isset($_SESSION['upload_token']) && $_SESSION['upload_token']) {
   file.
  ************************************************/
 if ($client->getAccessToken()) {
+  echo "\nlogged in OK\n";
+  
   $file = new Google_Service_Drive_DriveFile();
   $file->title = "Big File";
   $chunkSizeBytes = 1 * 1024 * 1024;
@@ -111,7 +114,12 @@ if ($client->getAccessToken()) {
   }
 
   fclose($handle);
+  
+  // print_r($result);
+  
 }
+else echo "\nNot logged in\n";
+
 echo pageHeader("File Upload - Uploading a large file");
 if (strpos($client_id, "googleusercontent") == false) {
   echo missingClientSecretsWarning();
@@ -134,6 +142,7 @@ function readVideoChunk ($handle, $chunkSize)
     return $giantChunk;
 }
 ?>
+
 <div class="box">
   <div class="request">
 <?php

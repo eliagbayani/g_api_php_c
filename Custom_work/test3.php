@@ -71,19 +71,19 @@ $postBody = '{"kind": "fusiontables#table", "name": "eli_tbl1", "isExportable": 
 $cols = '[{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"}, 
           {"kind": "fusiontables#column", "columnId": "2", "name": "latitude", "type": "LOCATION"}]';
 
+/*
 $col1 = new Google_Service_Fusiontables_Column();
 $col1->columnId = 1;
 $col1->name = "catalogNumber";
 $col1->type = "STRING";
-
 echo "<pre>";print_r($col1);echo"<pre>";
+*/
 
 $postBody = new Google_Service_Fusiontables_Table();
 $postBody->name = "eli_tbl4";
 $postBody->isExportable = true;
 $postBody->columns = json_decode($cols);
 $postBody->kind = "fusiontables#table";
-
 
 echo "<pre>";print_r($postBody);echo"<pre>";
 $results = $service->table->insert($postBody, array());
