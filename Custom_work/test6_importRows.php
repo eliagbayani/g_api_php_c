@@ -60,6 +60,7 @@ $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
 
 $service = new Google_Service_Fusiontables($client);
 
+/*
 $val = "{
                  'path': '/upload/fusiontables/v1/tables/' . $my_table . '/import',
                  'method': 'POST',
@@ -67,18 +68,13 @@ $val = "{
                  'headers' : {'Content-Type' : 'application/octet-stream'},
                  'body': 'cat1,9,\ncat2,18\n'
                }";
+*/
 
 $arr = array('uploadType'   => 'media', //'media' multipart
              'mimeType'     => 'application/octet-stream' ,
              'delimiter'    => ',',
-             'data'         => 'cat3,cat4' . "\n" . 'cat5,cat6',
-             'isStrict'     => false
-             
-             
-             // 'path'         => '/upload/fusiontables/v2/tables/' . $my_table . '/import',
-             // 'method'       => 'POST',
-             // 'headers'      => "{'Content-Type' : 'application/octet-stream'}"
-             // 'Content-Type' => 'application/octet-stream'
+             'data'         => 'cat3,cat4' . "\n" . 'cat5,cat6'
+             // ,'isStrict'     => false
              );
 
 
@@ -117,44 +113,3 @@ function printFile($service, $fileId) {
   }
 }
 =========================== */
-function upload_file($auth_token)
-{
-    $target_url = 'https://www.googleapis.com/upload/upload/fusiontables/v2/tables/import?uploadType=resumable';
-
-    $post = array('extra_info' => '123456',);
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL,$target_url);
-    curl_setopt($ch, CURLOPT_POST,1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    $result=curl_exec ($ch);
-    curl_close ($ch);
-    echo $result;
-}
-
-
-function upload_file2($auth_token)
-{
-    $target_url = 'https://www.googleapis.com/upload/upload/fusiontables/v2/tables/import?uploadType=resumable';
-    //This needs to be the full path to the file you want to send.
-    $file_name_with_full_path = realpath('./sample.jpeg');
-    /* curl will accept an array here too.
-    * Many examples I found showed a url-encoded string instead.
-    * Take note that the 'key' in the array will be the key that shows up in the
-    * $_FILES array of the accept script. and the at sign '@' is required before the
-    * file name.
-    */
-    $post = array('extra_info' => '123456','file_contents'=>'@'.$file_name_with_full_path);
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL,$target_url);
-    curl_setopt($ch, CURLOPT_POST,1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    $result=curl_exec ($ch);
-    curl_close ($ch);
-    echo $result;
-}
-
-
