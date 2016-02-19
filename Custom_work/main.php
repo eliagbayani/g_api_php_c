@@ -7,12 +7,11 @@ require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
 if($client = login_client()) echo "\nLogged in OK\n";
 else exit("Cannot login!");
 
-$taxon = array("concept_id" => 173, "sciname" => "Gadus eli");
-
+$taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
 
 
 $service = new Google_Service_Fusiontables($client);
-list_tables($service); exit;
+// list_tables($service); exit;
 
 
 $data = prepare_data($taxon['concept_id']); //exit;
@@ -24,7 +23,6 @@ $tableID = $table_info->tableId;
 
 // delete_table($service, $tableID); exit;
 
-
 if($permission = update_permission($client, $tableID))
 {
     echo "\nAction is permitted OK\n";
@@ -33,9 +31,12 @@ if($permission = update_permission($client, $tableID))
 }
 else echo "\nAction not permitted!\n";
 
-// append_rows($service, $tableID);
 exit;
+/*
+// from: "1G9gd_N5FCWCXb6zyZwRXUIdPgpSkNZv0IFa5Dj4R",
+from: "1vLYvA2LJ5i8UJuce-tybLDjASm9PUoMFUKeUTrKe",
 
+*/
 //=================================================================================
 function prepare_data($taxon_concept_id)
 {
@@ -115,11 +116,10 @@ function create_fusion_table($service, $taxon)
               {"kind": "fusiontables#column", "columnId": "2", "name": "dataset",       "type": "STRING"},
               {"kind": "fusiontables#column", "columnId": "2", "name": "dataset_id",    "type": "STRING"},
               {"kind": "fusiontables#column", "columnId": "2", "name": "gbifID",        "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "latitude",      "type": "LOCATION"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "longitude",     "type": "NUMBER"},
               {"kind": "fusiontables#column", "columnId": "2", "name": "recordedBy",    "type": "STRING"},
               {"kind": "fusiontables#column", "columnId": "2", "name": "identifiedBy",  "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "pic_url",       "type": "STRING"}
+              {"kind": "fusiontables#column", "columnId": "2", "name": "pic_url",       "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "location",      "type": "LOCATION"}
               ]';
     $postBody = new Google_Service_Fusiontables_Table();
     $postBody->name         = $taxon['concept_id']; //"eli_tbl4";
