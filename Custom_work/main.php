@@ -2,9 +2,6 @@
 include_once "../Custom/config.php";
 session_start();
 include_once "../examples/templates/base.php";
-/************************************************
-  Make an API request authenticated with a service account.
- ************************************************/
 require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
 
 if($client = login_client()) echo "\nLogged in OK\n";
@@ -12,13 +9,18 @@ else exit("Cannot login!");
 
 $taxon = array("concept_id" => 173, "sciname" => "Gadus eli");
 
+
+
 $service = new Google_Service_Fusiontables($client);
-// list_tables($service); //exit;
+list_tables($service); exit;
 
-// $table_info = create_fusion_table($service, $taxon);
-// $tableID = $table_info->tableId; 
 
-$tableID = "1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4";
+$data = prepare_data($taxon['concept_id']); //exit;
+
+$table_info = create_fusion_table($service, $taxon);
+$tableID = $table_info->tableId; 
+
+// $tableID = "1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4";
 
 // delete_table($service, $tableID); exit;
 
@@ -26,7 +28,7 @@ $tableID = "1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4";
 if($permission = update_permission($client, $tableID))
 {
     echo "\nAction is permitted OK\n";
-    $result = append_rows($service, $tableID);
+    $result = append_rows($service, $tableID, $data);
     print_r($result);
 }
 else echo "\nAction not permitted!\n";
@@ -35,29 +37,28 @@ else echo "\nAction not permitted!\n";
 exit;
 
 //=================================================================================
-
-function append_rows($service, $tableID)
+function prepare_data($taxon_concept_id)
 {
-    /*
-    $val = "{
-                     'path': '/upload/fusiontables/v1/tables/' . $my_table . '/import',
-                     'method': 'POST',
-                     'params': {'uploadType': 'media'},
-                     'headers' : {'Content-Type' : 'application/octet-stream'},
-                     'body': 'cat1,9,\ncat2,18\n'
-                   }";
-    */
+    $txtFile = "../../eol_php_code/public/tmp/google_maps/fusion/" . $taxon_concept_id . ".txt";
+    $file_array = file($txtFile);
+    unset($file_array[0]); //remove first line, the headers
+    // echo "\n" . implode("", $file_array) . "\n";
+    return implode("", $file_array);
+    // file_put_contents("outfile.txt", implode("", $file_array));
+}
+
+function append_rows($service, $tableID, $data)
+{
     $arr = array('uploadType'   => 'media', //possible values: "media" "multipart" "resumable"
                  'mimeType'     => 'application/octet-stream' ,
                  'delimiter'    => "\t",
-                 'data'         => 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
+                 // 'data'         => 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
+                 'data'         => $data
                  // ,'isStrict'     => false
                  );
 
     $results = $service->table->importRows($tableID, $arr);
-    print_r($results);
-    exit;
-    
+    print_r($results); exit;
 }
 
 function list_tables($service)
@@ -108,13 +109,25 @@ function update_permission($client, $tableID)
 function create_fusion_table($service, $taxon)
 {
     $cols = '[{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "latitude",      "type": "LOCATION"}]';
+              {"kind": "fusiontables#column", "columnId": "2", "name": "sciname",       "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "publisher",     "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "publisher_id",  "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "dataset",       "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "dataset_id",    "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "gbifID",        "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "latitude",      "type": "LOCATION"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "longitude",     "type": "NUMBER"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "recordedBy",    "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "identifiedBy",  "type": "STRING"},
+              {"kind": "fusiontables#column", "columnId": "2", "name": "pic_url",       "type": "STRING"}
+              ]';
     $postBody = new Google_Service_Fusiontables_Table();
     $postBody->name         = $taxon['concept_id']; //"eli_tbl4";
     $postBody->isExportable = true;
     $postBody->columns      = json_decode($cols);
     $postBody->kind         = "fusiontables#table";
     $results = $service->table->insert($postBody, array());
+    echo "\nNew table created OK: " . $results->tableId . "\n";
     return $results;
     /*
     Google_Service_Fusiontables_Table Object
