@@ -57,6 +57,8 @@ $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
 // $my_table = "1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6";//eli_tbl3
 // $my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
 
+$my_table = "1_ceoW2ndzIEcgBVz5-zOMiDIHWM-AVE-KPY4mJty";
+
 
 $service = new Google_Service_Fusiontables($client);
 

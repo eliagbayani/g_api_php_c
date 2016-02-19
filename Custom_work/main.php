@@ -13,54 +13,70 @@ else exit("Cannot login!");
 $taxon = array("concept_id" => 173, "sciname" => "Gadus eli");
 
 $service = new Google_Service_Fusiontables($client);
-// list_tables($service); exit;
+// list_tables($service); //exit;
 
-$table_info = create_fusion_table($service, $taxon);
-$tableID = $table_info->tableId; exit("\n $tableID \n");
-$tableID = "1_ceoW2ndzIEcgBVz5-zOMiDIHWM-AVE-KPY4mJty";
-$permission = update_permission($client, $tableID);
+// $table_info = create_fusion_table($service, $taxon);
+// $tableID = $table_info->tableId; 
 
-exit;
+$tableID = "1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4";
 
-$my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
-// $my_table = "1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E"; //eli_tbl2
-// $my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8"; //Chanos chanos
-// $my_table = "1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y"; //copy of Chanos chanos
-// $my_table = "1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6";//eli_tbl3
-// $my_table = "1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx"; //eli_tbl4
+// delete_table($service, $tableID); exit;
 
 
-$service = new Google_Service_Fusiontables($client);
+if($permission = update_permission($client, $tableID))
+{
+    echo "\nAction is permitted OK\n";
+    $result = append_rows($service, $tableID);
+    print_r($result);
+}
+else echo "\nAction not permitted!\n";
 
-/*
-$val = "{
-                 'path': '/upload/fusiontables/v1/tables/' . $my_table . '/import',
-                 'method': 'POST',
-                 'params': {'uploadType': 'media'},
-                 'headers' : {'Content-Type' : 'application/octet-stream'},
-                 'body': 'cat1,9,\ncat2,18\n'
-               }";
-*/
-
-$arr = array('uploadType'   => 'media', //'media' multipart
-             'mimeType'     => 'application/octet-stream' ,
-             'delimiter'    => ',',
-             'data'         => 'cat3,cat4' . "\n" . 'cat5,cat6'
-             // ,'isStrict'     => false
-             );
-
-
-$results = $service->table->importRows($my_table, $arr);
-print_r($results);
+// append_rows($service, $tableID);
 exit;
 
 //=================================================================================
-function list_tables($service)
+
+function append_rows($service, $tableID)
 {
-    $results = $service->table->listTable();
-    foreach ($results as $item) echo "\n" . $item['name'] . " - " . $item['tableId'];
+    /*
+    $val = "{
+                     'path': '/upload/fusiontables/v1/tables/' . $my_table . '/import',
+                     'method': 'POST',
+                     'params': {'uploadType': 'media'},
+                     'headers' : {'Content-Type' : 'application/octet-stream'},
+                     'body': 'cat1,9,\ncat2,18\n'
+                   }";
+    */
+    $arr = array('uploadType'   => 'media', //possible values: "media" "multipart" "resumable"
+                 'mimeType'     => 'application/octet-stream' ,
+                 'delimiter'    => "\t",
+                 'data'         => 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
+                 // ,'isStrict'     => false
+                 );
+
+    $results = $service->table->importRows($tableID, $arr);
+    print_r($results);
+    exit;
+    
 }
 
+function list_tables($service)
+{
+    $tables = $service->table->listTable();
+    echo "\nNo. of tables: " . count($tables) . "\n";
+    foreach ($tables as $table) echo "\n" . $table['name'] . " - " . $table['tableId'];
+}
+
+function delete_table($service, $tableID)
+{
+    $results = $service->table->delete($tableID);
+    echo "\n--\n";
+    print_r($results);
+    echo "\n--\n";
+    list_tables($service); //exit;
+    
+    exit;
+}
 function update_permission($client, $tableID)
 {
     $permissionsService = new Google_Service_Drive($client);
