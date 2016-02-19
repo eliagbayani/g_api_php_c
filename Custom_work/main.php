@@ -11,23 +11,21 @@ $taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
 
 
 $service = new Google_Service_Fusiontables($client);
-// list_tables($service); exit;
+list_tables($service); exit;
 
 
-$data = prepare_data($taxon['concept_id']); //exit;
 
-$table_info = create_fusion_table($service, $taxon);
-$tableID = $table_info->tableId; 
+// $table_info = create_fusion_table($service, $taxon);
+// $tableID = $table_info->tableId; 
 
-// $tableID = "1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4";
+$tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq";
 
 // delete_table($service, $tableID); exit;
 
 if($permission = update_permission($client, $tableID))
 {
     echo "\nAction is permitted OK\n";
-    $result = append_rows($service, $tableID, $data);
-    print_r($result);
+    append_rows($service, $tableID, $taxon);
 }
 else echo "\nAction not permitted!\n";
 
@@ -43,32 +41,75 @@ function prepare_data($taxon_concept_id)
     $txtFile = "../../eol_php_code/public/tmp/google_maps/fusion/" . $taxon_concept_id . ".txt";
     $file_array = file($txtFile);
     unset($file_array[0]); //remove first line, the headers
+    return $file_array;
     // echo "\n" . implode("", $file_array) . "\n";
-    return implode("", $file_array);
+    // return implode("", $file_array);
     // file_put_contents("outfile.txt", implode("", $file_array));
 }
 
-function append_rows($service, $tableID, $data)
+function append_rows($service, $tableID, $taxon)
 {
+    $rows = prepare_data($taxon['concept_id']);
+    
+    //append batches of 10k
+    $i = 0; $partial = array(); //initialize
+    foreach($rows as $row) //$row is String not array
+    {
+        if(number_of_cols($row) != 11) continue; //exclude row if total no. of cols is not 11, if not it will cause Fatal error "(400) Content has a different number of columns than the table".
+        $row = str_replace('"', "'", $row);      //need to do this to avoid "Parsing failure. Quotation mark found in unquoted value"
+        
+        $partial[] = $row;
+        $i++;
+        if(($i % 10000) == 0)
+        {
+            echo "\n[$i]\n";
+            // insert_rows($partial, $tableID, $service);
+            $i = 0; $partial = array(); //initialize again...
+        }
+    }
+    if($partial) insert_rows($partial, $tableID, $service); //insert last batch
+}
+
+function number_of_cols($row)
+{
+    $cols = explode("\t", $row);
+    return count($cols);
+}
+
+function insert_rows($data, $tableID, $service)
+{
+    $data = implode("", $data); //convert array to string;
     $arr = array('uploadType'   => 'media', //possible values: "media" "multipart" "resumable"
                  'mimeType'     => 'application/octet-stream' ,
                  'delimiter'    => "\t",
-                 // 'data'         => 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
-                 'data'         => $data
-                 // ,'isStrict'     => false
+                 'data'         => $data    //'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
+                 ,'isStrict'     => false
                  );
-
-    $results = $service->table->importRows($tableID, $arr);
-    print_r($results); exit;
+    if($result = $service->table->importRows($tableID, $arr))
+    {
+        echo "\nNo. of rows recieved: " . $result->numRowsReceived . "\n";
+        // print_r($results); //exit;
+    }
 }
 
 function list_tables($service)
 {
     $tables = $service->table->listTable();
     echo "\nNo. of tables: " . count($tables) . "\n";
-    foreach ($tables as $table) echo "\n" . $table['name'] . " - " . $table['tableId'];
+    foreach ($tables as $table)
+    {
+        echo "\n" . $table['name'] . " - " . $table['tableId'] . " = " . total_records($table['tableId'], $service);
+    }
+    
+    
 }
 
+function total_records($tableID, $service)
+{
+    $result = $service->query->sql("SELECT count('*') FROM $tableID");  //working OK
+    // echo "<pre>";print_r($result);echo "</pre>";
+    return $result->rows[0][0];
+}
 function delete_table($service, $tableID)
 {
     $results = $service->table->delete($tableID);

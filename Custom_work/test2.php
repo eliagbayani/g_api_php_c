@@ -11,8 +11,10 @@
 
   $my_table = "1YPvGpDseeNeODm8uAdd-TPm_WjI89c-uat0Dy-H8";
   $my_table = "1LHfg3v4BTByQiyo7w0Di5uaumLPZtJHwij4jT53u"; //eli_tbl1
-  $results = $service->query->sql("SELECT count('*') FROM $my_table");  //working OK  
-  $results = $service->query->sql("SELECT * FROM $my_table");           //working OK
+  $my_table = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq";
+  $result = $service->query->sql("SELECT count('*') FROM $my_table");  //working OK  
+  // $result = $service->query->sql("SELECT * FROM $my_table");           //working OK
   
-  echo "<pre>";print_r($results);echo "</pre>";
+  echo "<pre>";print_r($result);echo "</pre>";
+  echo "\n" . $result->rows[0][0] . "\n";
 ?>
