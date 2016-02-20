@@ -13,6 +13,24 @@ $taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
 $service = new Google_Service_Fusiontables($client);
 list_tables($service); exit;
 
+/*
+$ids = array(
+"1G9gd_N5FCWCXb6zyZwRXUIdPgpSkNZv0IFa5Dj4R",
+"1tWECJClsBa04mysXRfVNtpa9caKs3o_pLlvE424R",
+"1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4", 
+"1ap-k8cR21eDns94u_0kPauS3EVJ4x0hX5LOfOIy9",
+"1jK8wxcN1qhHLBnOVFMAXwxSEGZEavVJ_GaHr5KTQ",
+"1ueFQ2Yy41EA4VqB0PhgX5m7HYW2aKeLuE86ewkPO", 
+"1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx", 
+"1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6",
+"1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y",
+"1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E", 
+"1mM46aIU-1crYi0yxK5N-HSJ4tgBO2uGnqe4k2Ypj");
+
+foreach($ids as $tableID) delete_table($service, $tableID);
+exit;
+*/
+
 
 
 // $table_info = create_fusion_table($service, $taxon);
@@ -30,11 +48,6 @@ if($permission = update_permission($client, $tableID))
 else echo "\nAction not permitted!\n";
 
 exit;
-/*
-// from: "1G9gd_N5FCWCXb6zyZwRXUIdPgpSkNZv0IFa5Dj4R",
-from: "1vLYvA2LJ5i8UJuce-tybLDjASm9PUoMFUKeUTrKe",
-
-*/
 //=================================================================================
 function prepare_data($taxon_concept_id)
 {
@@ -79,17 +92,13 @@ function number_of_cols($row)
 function insert_rows($data, $tableID, $service)
 {
     $data = implode("", $data); //convert array to string;
-    $arr = array('uploadType'   => 'media', //possible values: "media" "multipart" "resumable"
+    $arr = array('uploadType'   => 'media', //possible values: "media" "multipart" "resumable", but only 'media' works for our purpose
                  'mimeType'     => 'application/octet-stream' ,
                  'delimiter'    => "\t",
-                 'data'         => $data    //'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
+                 'data'         => $data    //sample data: 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
                  ,'isStrict'     => false
                  );
-    if($result = $service->table->importRows($tableID, $arr))
-    {
-        echo "\nNo. of rows recieved: " . $result->numRowsReceived . "\n";
-        // print_r($results); //exit;
-    }
+    if($result = $service->table->importRows($tableID, $arr)) echo "\nNo. of rows recieved: " . $result->numRowsReceived . "\n";
 }
 
 function list_tables($service)
@@ -100,8 +109,6 @@ function list_tables($service)
     {
         echo "\n" . $table['name'] . " - " . $table['tableId'] . " = " . total_records($table['tableId'], $service);
     }
-    
-    
 }
 
 function total_records($tableID, $service)
@@ -116,9 +123,9 @@ function delete_table($service, $tableID)
     echo "\n--\n";
     print_r($results);
     echo "\n--\n";
-    list_tables($service); //exit;
+    // list_tables($service); //exit;
     
-    exit;
+    // exit;
 }
 function update_permission($client, $tableID)
 {
