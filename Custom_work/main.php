@@ -11,7 +11,9 @@ $taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
 
 
 $service = new Google_Service_Fusiontables($client);
-list_tables($service); exit;
+// list_tables($service); exit;
+
+
 
 /*
 $ids = array(
@@ -36,7 +38,8 @@ exit;
 // $table_info = create_fusion_table($service, $taxon);
 // $tableID = $table_info->tableId; 
 
-$tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq";
+$tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
+insert_template($tableID, $service); exit;
 
 // delete_table($service, $tableID); exit;
 
@@ -58,6 +61,40 @@ function prepare_data($taxon_concept_id)
     // echo "\n" . implode("", $file_array) . "\n";
     // return implode("", $file_array);
     // file_put_contents("outfile.txt", implode("", $file_array));
+}
+
+function insert_template($tableID, $service)
+{
+    $postBody = new Google_Service_Fusiontables_Template();
+    
+    // $postBody->templateId = 1972;
+    $postBody->body = '{template .contents}
+    <div class="googft-info-window" style="{if $data.value.pic_url}height: 300px;{/if} overflow-y: auto">
+    <h3>{$data.value.sciname}</h3><br/>
+    {if $data.value.pic_url}<img src="{$data.value.pic_url}" style="vertical-align: top; height: 15px"/>{/if}
+    <b>Catalog number:</b>  {$data.value.catalogNumber}<br/>
+    <b>Source portal:</b>   <a href="http://www.gbif.org/occurrence/{$data.value.gbifID}" target="_blank">GBIF data</a><br/>
+    <b>Publisher:</b>       <a href="http://www.gbif.org/publisher/{$data.value.publisher_id}" target="_blank">{$data.value.publisher}</a><br/>
+    <b>Dataset:</b>         <a href="http://www.gbif.org/dataset/{$data.value.dataset_id}" target="_blank">{$data.value.dataset}</a><br/>
+    {if $data.value.recordedBy}<b>Recorded by:</b>     {$data.value.recordedBy}<br/>{/if}
+    {if $data.value.identifiedBy}<b>Identified by:</b>     {$data.value.identifiedBy}<br/>{/if}
+    </div>
+    {/template}'; 
+    
+    
+    $result = $service->template->insert($tableID, $postBody); //working OK
+    
+    // $result = $service->template->delete($tableID, 5);    //working OK
+    // $result = $service->template->delete($tableID, 7);    //working OK
+    $result = $service->template->listTemplate($tableID);
+
+    print_r($result);
+    
+    // [name] => 
+    // [tableId] => 
+    // [kind] =>
+    
+    
 }
 
 function append_rows($service, $tableID, $taxon)
