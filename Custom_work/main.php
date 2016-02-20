@@ -8,6 +8,8 @@ if($client = login_client()) echo "\nLogged in OK\n";
 else exit("Cannot login!");
 
 $taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
+$taxon = array("concept_id" => 175, "sciname" => "Chanos chanos");
+
 
 
 $service = new Google_Service_Fusiontables($client);
@@ -15,7 +17,7 @@ $service = new Google_Service_Fusiontables($client);
 
 
 
-/*
+/* //delete a list of tables
 $ids = array(
 "1G9gd_N5FCWCXb6zyZwRXUIdPgpSkNZv0IFa5Dj4R",
 "1tWECJClsBa04mysXRfVNtpa9caKs3o_pLlvE424R",
@@ -28,18 +30,17 @@ $ids = array(
 "1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y",
 "1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E", 
 "1mM46aIU-1crYi0yxK5N-HSJ4tgBO2uGnqe4k2Ypj");
-
 foreach($ids as $tableID) delete_table($service, $tableID);
 exit;
 */
 
 
 
-// $table_info = create_fusion_table($service, $taxon);
-// $tableID = $table_info->tableId; 
+$table_info = create_fusion_table($service, $taxon);
+$tableID = $table_info->tableId; 
 
-$tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
-insert_template($tableID, $service); exit;
+// $tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
+insert_template($tableID, $service); //exit;
 
 // delete_table($service, $tableID); exit;
 
@@ -76,11 +77,10 @@ function insert_template($tableID, $service)
     <b>Source portal:</b>   <a href="http://www.gbif.org/occurrence/{$data.value.gbifID}" target="_blank">GBIF data</a><br/>
     <b>Publisher:</b>       <a href="http://www.gbif.org/publisher/{$data.value.publisher_id}" target="_blank">{$data.value.publisher}</a><br/>
     <b>Dataset:</b>         <a href="http://www.gbif.org/dataset/{$data.value.dataset_id}" target="_blank">{$data.value.dataset}</a><br/>
-    {if $data.value.recordedBy}<b>Recorded by:</b>     {$data.value.recordedBy}<br/>{/if}
-    {if $data.value.identifiedBy}<b>Identified by:</b>     {$data.value.identifiedBy}<br/>{/if}
+    {if $data.value.recordedBy}<b>Recorded by:</b>      {$data.value.recordedBy}<br/>{/if}
+    {if $data.value.identifiedBy}<b>Identified by:</b>  {$data.value.identifiedBy}<br/>{/if}
     </div>
-    {/template}'; 
-    
+    {/template}';
     
     $result = $service->template->insert($tableID, $postBody); //working OK
     
