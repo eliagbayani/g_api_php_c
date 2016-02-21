@@ -30,6 +30,10 @@ Fusion table limitations:
 http://stackoverflow.com/questions/11952166/what-are-the-technical-limitations-when-using-fusion-tables
 http://www.niemanlab.org/2012/06/google-loosens-its-limits-and-pricing-on-maps-api/
 ==============================================================================
+Fusion codebase and developer site:
+https://code.google.com/u/115787363615701588400/
 ==============================================================================
+Map infoWindow: https://support.google.com/fusiontables/answer/171216
+https://support.google.com/fusiontables/answer/3081246?hl=en&ref_topic=2575652
 ==============================================================================
 ==============================================================================
