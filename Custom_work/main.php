@@ -13,7 +13,7 @@ $taxon = array("concept_id" => 175, "sciname" => "Chanos chanos");
 
 
 $service = new Google_Service_Fusiontables($client);
-// list_tables($service); exit;
+list_tables($service); exit;
 
 
 

@@ -26,6 +26,9 @@ function makeApiCallImportRows() {
 }
 
 ==============================================================================
+Fusion table limitations:
+http://stackoverflow.com/questions/11952166/what-are-the-technical-limitations-when-using-fusion-tables
+http://www.niemanlab.org/2012/06/google-loosens-its-limits-and-pricing-on-maps-api/
 ==============================================================================
 ==============================================================================
 ==============================================================================
