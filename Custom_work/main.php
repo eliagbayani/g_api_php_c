@@ -7,33 +7,28 @@ require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
 if($client = login_client()) echo "\nLogged in OK\n";
 else exit("Cannot login!");
 
-$taxon = array("concept_id" => 174, "sciname" => "Gadus eli");
-$taxon = array("concept_id" => 175, "sciname" => "Chanos chanos");
-
-
+$taxon = array("concept_id" => 1048643, "sciname" => "Phalacrocorax penicillatus");
+// $taxon = array("concept_id" => 175, "sciname" => "Chanos chanos");
 
 $service = new Google_Service_Fusiontables($client);
-list_tables($service); exit;
+// list_tables($service); return;
 
+// delete_table($service, "153xFKz6jTMlkWQF0eljeDkc2olJ0DbsUyILXwmie"); list_tables($service); return;
 
-
-/* //delete a list of tables
-$ids = array(
-"1G9gd_N5FCWCXb6zyZwRXUIdPgpSkNZv0IFa5Dj4R",
-"1tWECJClsBa04mysXRfVNtpa9caKs3o_pLlvE424R",
-"1tD7V7ZouZymwY7P0gHvBD8LWU_aWC7sXUASxMwX4", 
-"1ap-k8cR21eDns94u_0kPauS3EVJ4x0hX5LOfOIy9",
-"1jK8wxcN1qhHLBnOVFMAXwxSEGZEavVJ_GaHr5KTQ",
-"1ueFQ2Yy41EA4VqB0PhgX5m7HYW2aKeLuE86ewkPO", 
-"1Oeyld88agmOuZm9wKaMduDqXoia7MQpkieU6-fNx", 
-"1USTwiVIYKd333fvGcdIuYuhtmaL6YJJkgWIkT9e6",
-"1sHg1xKApgcbSVKTtHUKeOiGGCAP3kjLPJiq_eu7y",
-"1N4ua-naIOf8rVSjsoqNkDqTiiA0PtvfrE7As-E-E", 
-"1mM46aIU-1crYi0yxK5N-HSJ4tgBO2uGnqe4k2Ypj");
-foreach($ids as $tableID) delete_table($service, $tableID);
-exit;
+/* //Updating templates...
+$tableID = "1TspfLoWk5Vee6PHP78g09vwYtmNoeMIBgvt6Keiq";
+$templateId = 1;
+update_template($service, $tableID, $templateId);
+return;
 */
 
+/* //delete a list of tables
+$ids = array("1onEZfLtSHdlElNP8EvAZrx-dsScJmotY1kSEk3UR", "1O3yqE1j-ryGDsfnFa7Q7aS3Mlk9HVsbYDoERZa7Y",
+             "1aqzzOgYTvDBdOztZdVSZcKTsbm9fR--pe4WIcv9s", "1Knzolalnq4gJpZsQkv_Ybgk_NovBZBpEULHhi1EL");
+foreach($ids as $tableID) delete_table($service, $tableID);
+list_tables($service);
+return;
+*/
 
 
 $table_info = create_fusion_table($service, $taxon);
@@ -42,8 +37,6 @@ $tableID = $table_info->tableId;
 // $tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
 insert_template($tableID, $service); //exit;
 
-// delete_table($service, $tableID); exit;
-
 if($permission = update_permission($client, $tableID))
 {
     echo "\nAction is permitted OK\n";
@@ -51,7 +44,8 @@ if($permission = update_permission($client, $tableID))
 }
 else echo "\nAction not permitted!\n";
 
-exit;
+return; //terminate program
+//=================================================================================
 //=================================================================================
 function prepare_data($taxon_concept_id)
 {
@@ -67,34 +61,13 @@ function prepare_data($taxon_concept_id)
 function insert_template($tableID, $service)
 {
     $postBody = new Google_Service_Fusiontables_Template();
-    
-    // $postBody->templateId = 1972;
-    $postBody->body = '{template .contents}
-    <div class="googft-info-window" style="{if $data.value.pic_url}height: 300px;{/if} overflow-y: auto">
-    <h3>{$data.value.sciname}</h3><br/>
-    {if $data.value.pic_url}<img src="{$data.value.pic_url}" style="vertical-align: top; height: 15px"/>{/if}
-    <b>Catalog number:</b>  {$data.value.catalogNumber}<br/>
-    <b>Source portal:</b>   <a href="http://www.gbif.org/occurrence/{$data.value.gbifID}" target="_blank">GBIF data</a><br/>
-    <b>Publisher:</b>       <a href="http://www.gbif.org/publisher/{$data.value.publisher_id}" target="_blank">{$data.value.publisher}</a><br/>
-    <b>Dataset:</b>         <a href="http://www.gbif.org/dataset/{$data.value.dataset_id}" target="_blank">{$data.value.dataset}</a><br/>
-    {if $data.value.recordedBy}<b>Recorded by:</b>      {$data.value.recordedBy}<br/>{/if}
-    {if $data.value.identifiedBy}<b>Identified by:</b>  {$data.value.identifiedBy}<br/>{/if}
-    </div>
-    {/template}';
-    
+    $postBody->body = get_template_body();
     $result = $service->template->insert($tableID, $postBody); //working OK
     
     // $result = $service->template->delete($tableID, 5);    //working OK
     // $result = $service->template->delete($tableID, 7);    //working OK
     $result = $service->template->listTemplate($tableID);
-
     print_r($result);
-    
-    // [name] => 
-    // [tableId] => 
-    // [kind] =>
-    
-    
 }
 
 function append_rows($service, $tableID, $taxon)
@@ -110,10 +83,11 @@ function append_rows($service, $tableID, $taxon)
         
         $partial[] = $row;
         $i++;
-        if(($i % 10000) == 0)
+        if(($i % 10000) == 0)   //batches of 10K
         {
             echo "\n[$i]\n";
-            // insert_rows($partial, $tableID, $service);
+            insert_rows($partial, $tableID, $service);
+            echo "...sleep 20 secs...\n"; sleep(20);
             $i = 0; $partial = array(); //initialize again...
         }
     }
@@ -133,9 +107,9 @@ function insert_rows($data, $tableID, $service)
                  'mimeType'     => 'application/octet-stream' ,
                  'delimiter'    => "\t",
                  'data'         => $data    //sample data: 'cat3' . "\t" . '11' . "\n" . 'cat5' . "\t" . '22'
-                 ,'isStrict'     => false
+                 ,'isStrict'    => true    //false
                  );
-    if($result = $service->table->importRows($tableID, $arr)) echo "\nNo. of rows recieved: " . $result->numRowsReceived . "\n";
+    if($result = $service->table->importRows($tableID, $arr)) echo "\nNo. of rows received: " . $result->numRowsReceived . "\n";
 }
 
 function list_tables($service)
@@ -156,13 +130,10 @@ function total_records($tableID, $service)
 }
 function delete_table($service, $tableID)
 {
-    $results = $service->table->delete($tableID);
+    $result = $service->table->delete($tableID);
+    echo "\n--";
+    echo "\n[$result]";
     echo "\n--\n";
-    print_r($results);
-    echo "\n--\n";
-    // list_tables($service); //exit;
-    
-    // exit;
 }
 function update_permission($client, $tableID)
 {
@@ -298,6 +269,34 @@ function login_client()
     if($client->getAccessToken()) return $client;
     else return false;
     //************************************************
+}
+
+function update_template($service, $tableID, $templateId)
+{
+    $result = $service->template->listTemplate($tableID);
+    print_r($result);
+
+    $postBody = new Google_Service_Fusiontables_Template();
+    $postBody->body = get_template_body();
+
+    $result = $service->template->update($tableID, $templateId, $postBody); //working OK
+    print_r($result);
+}
+
+function get_template_body()
+{
+    return '{template .contents}
+    <div class="googft-info-window" style="{if $data.value.pic_url}height: 300px;{/if} overflow-y: auto">
+    <h3>{$data.value.sciname}</h3>
+    {if $data.value.pic_url}<img src="{$data.value.pic_url}" style="vertical-align: top; height: 15px"/>{/if}
+    <b>Catalog number:</b>  {$data.value.catalogNumber}<br/>
+    <b>Source portal:</b>   <a href="http://www.gbif.org/occurrence/{$data.value.gbifID}" target="_blank">GBIF</a><br/>
+    <b>Publisher:</b>       <a href="http://www.gbif.org/publisher/{$data.value.publisher_id}" target="_blank">{$data.value.publisher}</a><br/>
+    <b>Dataset:</b>         <a href="http://www.gbif.org/dataset/{$data.value.dataset_id}" target="_blank">{$data.value.dataset}</a><br/>
+    {if $data.value.recordedBy}<b>Recorded by:</b>      {$data.value.recordedBy}<br/>{/if}
+    {if $data.value.identifiedBy}<b>Identified by:</b>  {$data.value.identifiedBy}<br/>{/if}
+    </div>
+    {/template}';
 }
 
 /* //working OK =========================== Updating permissions to Google files

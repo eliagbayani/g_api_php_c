@@ -36,4 +36,5 @@ https://code.google.com/u/115787363615701588400/
 Map infoWindow: https://support.google.com/fusiontables/answer/171216
 https://support.google.com/fusiontables/answer/3081246?hl=en&ref_topic=2575652
 ==============================================================================
+Wizard: http://fusion-tables-api-samples.googlecode.com/svn/trunk/FusionTablesLayerWizard/src/index.html
 ==============================================================================
