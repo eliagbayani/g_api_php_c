@@ -9,16 +9,8 @@
     </head>
 <body>
     <div id="map-canvas"></div>
-    <div>
-        <!-- <label class="layer-wizard-search-label"> -->
-        Publisher <select id="select_publisher" onchange="select_change(this.value);">
-                  <option value="--ALL--">--ALL--</option>
-                  </select>
-        <!-- </label> -->
-    </div>
-    <div>
-        <div id="heatmap_label"><input id="heatmap" type="checkbox" unchecked /> Enable heatmap</div>
-    </div>
+    <div>Publisher <select id="select_publisher" onchange="select_change(this.value);"><option value="--ALL--">--ALL--</option></select></div>
+    <div id="heatmap_label"><input id="heatmap_radio" type="checkbox" unchecked /> Enable heatmap</div>
 </body>
 </html>
 

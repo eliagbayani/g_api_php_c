@@ -8,30 +8,30 @@ function initialize() {
         heatmap: { enabled: false }
     });
       
-    google.maps.event.addDomListener(document.getElementById('heatmap'), 'click', function() {
-        var heatmap = document.getElementById('heatmap');
+    google.maps.event.addDomListener(document.getElementById('heatmap_radio'), 'click', function() {
+        var heatmap_radio = document.getElementById('heatmap_radio');
         layer_0.setOptions({
-        heatmap: {enabled: heatmap.checked}
+        heatmap: {enabled: heatmap_radio.checked}
         });
     });
     
-    document.getElementById('heatmap').checked = false; //intial state
+    document.getElementById('heatmap_radio').checked = false; //intial state
     add_publishers();
 }
 
 function select_change() {
-    var heatmap = document.getElementById('heatmap');
+    var heatmap_radio = document.getElementById('heatmap_radio');
     var heatmap_label = document.getElementById('heatmap_label');
     var whereClause;
     var searchString = document.getElementById('select_publisher').value.replace(/'/g, "\\'");
     if (searchString != '--ALL--') {
         whereClause = "'publisher' = '" + searchString + "'";
-        heatmap.checked = false;
+        heatmap_radio.checked = false;
         layer_0.setOptions({heatmap: {enabled: false}});
-        heatmap.disabled = true;
+        heatmap_radio.disabled = true;
         heatmap_label.style['color'] = 'gray';
     }
-    else { heatmap.disabled = false;
+    else { heatmap_radio.disabled = false;
            heatmap_label.style['color'] = 'black';
     }
     layer_0.setOptions({query: {select: "'location'", from: data.tableID, where: whereClause}});
