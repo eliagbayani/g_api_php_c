@@ -13,15 +13,15 @@ $taxon = array("concept_id" => 206692, "sciname" => "Gadus morhua Linnaeus, 1758
 $service = new Google_Service_Fusiontables($client);
 // list_tables($service); return;
 
-// delete_table($service, "153xFKz6jTMlkWQF0eljeDkc2olJ0DbsUyILXwmie"); list_tables($service); return;
+// delete_table($service, "10l1qnTq0kbayqgLwVMyIJABki7Elz_49NOkcAiRV"); list_tables($service); return;
 
-// /* //Updating templates...
+/* //Updating templates...
 $tableID = "1TspfLoWk5Vee6PHP78g09vwYtmNoeMIBgvt6Keiq";
 $tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
 $templateId = 8;
 update_template($service, $tableID, $templateId);
 return;
-// */
+*/
 
 /* //delete a list of tables
 $ids = array("1onEZfLtSHdlElNP8EvAZrx-dsScJmotY1kSEk3UR", "1O3yqE1j-ryGDsfnFa7Q7aS3Mlk9HVsbYDoERZa7Y",
@@ -31,6 +31,12 @@ list_tables($service);
 return;
 */
 
+/* //update table
+$taxon = array("concept_id" => 206692, "sciname" => "Gadus morhua Linnaeus, 1758");
+update_fusion_table($service, $taxon, "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq");
+list_tables($service);
+return;
+*/
 
 $table_info = create_fusion_table($service, $taxon);
 $tableID = $table_info->tableId; 
@@ -163,20 +169,35 @@ function update_permission($client, $tableID)
     */
 }
 
+function update_fusion_table($service, $taxon, $tableID)
+{
+    $cols = get_cols();
+    $postBody = new Google_Service_Fusiontables_Table();
+    $postBody->name         = $taxon['concept_id']; //"eli_tbl4";
+    $postBody->isExportable = true;
+    $postBody->columns      = json_decode($cols);
+    $postBody->kind         = "fusiontables#table";
+    if($results = $service->table->update($tableID, $postBody, array())) echo "\nExisting table updated OK: " . $results->tableId . "\n";
+    return $results;
+}
+
+function get_cols()
+{
+    return '[{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "2", "name": "sciname",       "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "3", "name": "publisher",     "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "4", "name": "publisher_id",  "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "5", "name": "dataset",       "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "6", "name": "dataset_id",    "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "7", "name": "gbifID",        "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "8", "name": "recordedBy",    "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "9", "name": "identifiedBy",  "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "10", "name": "pic_url",       "type": "STRING"},
+             {"kind": "fusiontables#column", "columnId": "11", "name": "location",      "type": "LOCATION"}]';
+}
 function create_fusion_table($service, $taxon)
 {
-    $cols = '[{"kind": "fusiontables#column", "columnId": "1", "name": "catalogNumber", "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "sciname",       "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "publisher",     "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "publisher_id",  "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "dataset",       "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "dataset_id",    "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "gbifID",        "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "recordedBy",    "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "identifiedBy",  "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "pic_url",       "type": "STRING"},
-              {"kind": "fusiontables#column", "columnId": "2", "name": "location",      "type": "LOCATION"}
-              ]';
+    $cols = get_cols();
     $postBody = new Google_Service_Fusiontables_Table();
     $postBody->name         = $taxon['concept_id']; //"eli_tbl4";
     $postBody->isExportable = true;
