@@ -7,8 +7,8 @@
 html, body, #googft-mapCanvas {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
+  height: 400px;
+  width: 500px;
 }
 </style>
 
@@ -21,8 +21,8 @@ html, body, #googft-mapCanvas {
     mapDiv.style.width = '100%';
     mapDiv.style.height = '100%';
     var map = new google.maps.Map(mapDiv, {
-      center: new google.maps.LatLng(1.87214,-157.42781),
-      zoom: 3,
+      center: new google.maps.LatLng(52.2417,-6.96353),
+      zoom: 2,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
@@ -31,13 +31,13 @@ html, body, #googft-mapCanvas {
       heatmap: { enabled: false },
       query: {
         select: "col7",
-        from: "153xFKz6jTMlkWQF0eljeDkc2olJ0DbsUyILXwmie",
+        from: "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq",
         where: ""
       },
       
       options: {
         // styleId: 2,
-        templateId: 1
+        // templateId: 1
       }
     });
 

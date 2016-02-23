@@ -8,19 +8,20 @@ if($client = login_client()) echo "\nLogged in OK\n";
 else exit("Cannot login!");
 
 $taxon = array("concept_id" => 1048643, "sciname" => "Phalacrocorax penicillatus");
-// $taxon = array("concept_id" => 175, "sciname" => "Chanos chanos");
+$taxon = array("concept_id" => 206692, "sciname" => "Gadus morhua Linnaeus, 1758");
 
 $service = new Google_Service_Fusiontables($client);
 // list_tables($service); return;
 
 // delete_table($service, "153xFKz6jTMlkWQF0eljeDkc2olJ0DbsUyILXwmie"); list_tables($service); return;
 
-/* //Updating templates...
+// /* //Updating templates...
 $tableID = "1TspfLoWk5Vee6PHP78g09vwYtmNoeMIBgvt6Keiq";
-$templateId = 1;
+$tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
+$templateId = 8;
 update_template($service, $tableID, $templateId);
 return;
-*/
+// */
 
 /* //delete a list of tables
 $ids = array("1onEZfLtSHdlElNP8EvAZrx-dsScJmotY1kSEk3UR", "1O3yqE1j-ryGDsfnFa7Q7aS3Mlk9HVsbYDoERZa7Y",
@@ -34,7 +35,6 @@ return;
 $table_info = create_fusion_table($service, $taxon);
 $tableID = $table_info->tableId; 
 
-// $tableID = "1XqplhcfZgYPFel9FIT6T0S5WTclNPIElOH4IAAKq"; //Gadus morhua
 insert_template($tableID, $service); //exit;
 
 if($permission = update_permission($client, $tableID))
