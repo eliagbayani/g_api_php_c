@@ -13,15 +13,12 @@ var map;
 var layer_0;
 function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'), {
-    center: new google.maps.LatLng(33.83253,-118.4745), //36.5978891330702, -90
+    center: new google.maps.LatLng(33.83253,-118.4745),
     zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     layer_0 = new google.maps.FusionTablesLayer({
-        query: {
-        select: "'location'",
-        from: "1TspfLoWk5Vee6PHP78g09vwYtmNoeMIBgvt6Keiq"
-        },
+        query: {select: "'location'", from: "1TspfLoWk5Vee6PHP78g09vwYtmNoeMIBgvt6Keiq"},
         map: map,
         heatmap: { enabled: false }
     });
@@ -47,8 +44,7 @@ function changeMap_0() {
     if (searchString != '--Select--') {
         whereClause = "'publisher' = '" + searchString + "'";
         heatmap.checked = false;
-        layer_0.setOptions({heatmap: {enabled: false}
-        });
+        layer_0.setOptions({heatmap: {enabled: false}});
         
         heatmap.disabled = true;
         heatmap_label.style['color'] = 'gray';
